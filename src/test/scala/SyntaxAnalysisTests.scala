@@ -92,4 +92,12 @@ class SyntaxAnalysisTests extends ParseTests {
     intexp("42") should parseTo[IntExp](IntExp(42))
   }
 
+  test("parsing a true boolean as a BoolExp produces the correct tree") {
+    boolexp("true") should parseTo[BoolExp](BoolExp(true))
+  }
+
+  test("parsing a false boolean as a BoolExp produces the correct tree") {
+    boolexp("false") should parseTo[BoolExp](BoolExp(false))
+  }
+
 }
