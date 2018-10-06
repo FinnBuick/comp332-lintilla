@@ -100,4 +100,24 @@ class SyntaxAnalysisTests extends ParseTests {
     boolexp("false") should parseTo[BoolExp](BoolExp(false))
   }
 
+  test("parsing an empty block expression produces the correct tree") {
+    block("{}") should parseTo[Block](Block(Vector()))
+  }
+
+  test("parsing a block expression containing an integer expression produces the correct tree") {
+    block("{ 10 }") should parseTo[Block](Block(Vector(IntExp(10))))
+  }
+
+  test("parsing a block expression containing a true boolean expression produces the correct tree") {
+    block("{ true }") should parseTo[Block](Block(Vector(BoolExp(true))))
+  }
+
+  test("parsing a block expression containing a false boolean expression produces the correct tree") {
+    block("{ false }") should parseTo[Block](Block(Vector(BoolExp(false))))
+  }
+
+  test("parsing a block expression containing an identifier produces the correct tree") {
+    block("{ test }") should parseTo[Block](Block(Vector(IdnExp(IdnUse("test")))))
+  }
+
 }

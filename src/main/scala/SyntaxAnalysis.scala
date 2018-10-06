@@ -38,10 +38,15 @@ class SyntaxAnalysis (positions : Positions)
   // FIXME Add your parsers here!
 
   //lazy val letdecl : PackratParser[LetDecl] =
-  //  ("let" ~> identifier <~ "=" intexp ) ^^ { case n ~ e => LetDecl(n, e) }
+  //  ("let" ~> identifier <~ "=" intexp ) ^^ { case n ~ e => LetDecl(n, e) }\
+
+  lazy val block : PackratParser[Block] =
+    "{" ~> repsep(exp, ";") <~ "}" ^^ Block
 
   lazy val exp : PackratParser[Expression] =
-    intexp 
+    intexp |
+    boolexp |
+    idnuse ^^ IdnExp
 
   lazy val boolexp : PackratParser[BoolExp] =
     "true" ^^^ BoolExp(true) |
@@ -50,7 +55,7 @@ class SyntaxAnalysis (positions : Positions)
   lazy val intexp : PackratParser[IntExp] =
     integer ^^ { case s => IntExp(s.toInt) }
 
-  // Parses a literal integer.
+
   lazy val integer : PackratParser[String] =
     regex("[0-9]+".r)
 
