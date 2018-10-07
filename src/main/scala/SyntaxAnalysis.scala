@@ -43,6 +43,9 @@ class SyntaxAnalysis (positions : Positions)
   lazy val block : PackratParser[Block] =
     "{" ~> repsep(exp, ";") <~ "}" ^^ Block
 
+  lazy val let : PackratParser[LetDecl] =
+    "let" ~> idndef ~ ("=" ~> exp) ^^ { case i ~ e => LetDecl(i, e) }
+
   lazy val exp : PackratParser[Expression] =
     intexp |
     boolexp |

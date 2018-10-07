@@ -120,4 +120,8 @@ class SyntaxAnalysisTests extends ParseTests {
     block("{ test }") should parseTo[Block](Block(Vector(IdnExp(IdnUse("test")))))
   }
 
+  test("parsing a let declaration produces the correct tree") {
+    let("let a = 32") should parseTo[LetDecl](LetDecl(IdnDef("a"),IntExp(32)))
+  }
+
 }
