@@ -124,4 +124,8 @@ class SyntaxAnalysisTests extends ParseTests {
     let("let a = 32") should parseTo[LetDecl](LetDecl(IdnDef("a"),IntExp(32)))
   }
 
+  test("parsing a let declaration produces the correct tree") {
+    let("let a = 32") should parseTo[LetDecl](LetDecl(IdnDef("a"),IntExp(32)))
+  }
+
 }
