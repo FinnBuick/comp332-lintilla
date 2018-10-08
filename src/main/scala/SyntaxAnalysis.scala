@@ -37,19 +37,34 @@ class SyntaxAnalysis (positions : Positions)
 
   // FIXME Add your parsers here!
 
-  //lazy val letdecl : PackratParser[LetDecl] =
-  //  ("let" ~> identifier <~ "=" intexp ) ^^ { case n ~ e => LetDecl(n, e) }\
-
   lazy val block : PackratParser[Block] =
     "{" ~> repsep(exp, ";") <~ "}" ^^ Block
-
-  lazy val let : PackratParser[LetDecl] =
-    "let" ~> idndef ~ ("=" ~> exp) ^^ { case i ~ e => LetDecl(i, e) }
 
   lazy val exp : PackratParser[Expression] =
     intexp |
     boolexp |
     idnuse ^^ IdnExp
+
+  lazy val let : PackratParser[LetDecl] =
+    "let" ~> idndef ~ ("=" ~> exp) ^^ { case i ~ e => LetDecl(i, e) }
+
+  lazy val letmut : PackratParser[LetMutDecl] =
+    "let mut" ~> idndef ~ ("=" ~> exp) ^^ { case i ~ e => LetMutDecl(i, e) }
+
+  lazy val plusexp : PackratParser[PlusExp] =
+    exp ~ ("+" ~> exp) ^^ { case e ~ s  => PlusExp(e, s) }
+
+  lazy val minusexp : PackratParser[MinusExp] =
+    exp ~ ("-" ~> exp) ^^ { case e ~ s  => MinusExp(e, s) }
+
+  lazy val starexp : PackratParser[StarExp] =
+    exp ~ ("*" ~> exp) ^^ { case e ~ s  => StarExp(e, s) }
+
+  lazy val slashexp : PackratParser[SlashExp] =
+    exp ~ ("/" ~> exp) ^^ { case e ~ s  => SlashExp(e, s) }
+
+  lazy val negexp : PackratParser[NegExp] =
+    "-" ~> exp ^^ NegExp
 
   lazy val boolexp : PackratParser[BoolExp] =
     "true" ^^^ BoolExp(true) |

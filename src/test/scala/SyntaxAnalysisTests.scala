@@ -124,8 +124,28 @@ class SyntaxAnalysisTests extends ParseTests {
     let("let a = 32") should parseTo[LetDecl](LetDecl(IdnDef("a"),IntExp(32)))
   }
 
-  test("parsing a let declaration produces the correct tree") {
-    let("let a = 32") should parseTo[LetDecl](LetDecl(IdnDef("a"),IntExp(32)))
+  test("parsing a let mutable declaration produces the correct tree") {
+    letmut("let mut hello = 18") should parseTo[LetMutDecl](LetMutDecl(IdnDef("hello"), IntExp(18)))
+  }
+
+  test("parsing a plusexp containing integer literals produces the correct tree") {
+    plusexp("2 + 2") should parseTo[PlusExp](PlusExp(IntExp(2), IntExp(2)))
+  }
+
+  test("parsing a minusexp containing integer literals produces the correct tree") {
+    minusexp("2 - 2") should parseTo[MinusExp](MinusExp(IntExp(2), IntExp(2)))
+  }
+
+  test("parsing a starexp containing integer literals produces the correct tree") {
+    starexp("2 * 2") should parseTo[StarExp](StarExp(IntExp(2), IntExp(2)))
+  }
+
+  test("parsing a slashexp containing integer literals produces the correct tree") {
+    slashexp("2 / 2") should parseTo[SlashExp](SlashExp(IntExp(2), IntExp(2)))
+  }
+
+  test("parsing a negexp containing an integer literal produces the correct tree") {
+    negexp("- 2") should parseTo[NegExp](NegExp(IntExp(2)))
   }
 
 }
