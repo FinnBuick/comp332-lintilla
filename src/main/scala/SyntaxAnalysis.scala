@@ -43,6 +43,11 @@ class SyntaxAnalysis (positions : Positions)
   lazy val exp : PackratParser[Expression] =
     intexp |
     boolexp |
+    plusexp |
+    minusexp |
+    starexp |
+    slashexp |
+    negexp |
     idnuse ^^ IdnExp
 
   lazy val let : PackratParser[LetDecl] =
@@ -50,6 +55,9 @@ class SyntaxAnalysis (positions : Positions)
 
   lazy val letmut : PackratParser[LetMutDecl] =
     "let mut" ~> idndef ~ ("=" ~> exp) ^^ { case i ~ e => LetMutDecl(i, e) }
+
+  lazy val ifexp : PackratParser[IfExp] =
+    "if" ~> exp ~ (block <~ "else") ~ block ^^ { case c ~ d ~ e => IfExp(c, d, e) }
 
   lazy val plusexp : PackratParser[PlusExp] =
     exp ~ ("+" ~> exp) ^^ { case e ~ s  => PlusExp(e, s) }
@@ -72,7 +80,6 @@ class SyntaxAnalysis (positions : Positions)
 
   lazy val intexp : PackratParser[IntExp] =
     integer ^^ { case s => IntExp(s.toInt) }
-
 
   lazy val integer : PackratParser[String] =
     regex("[0-9]+".r)

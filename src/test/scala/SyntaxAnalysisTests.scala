@@ -148,4 +148,8 @@ class SyntaxAnalysisTests extends ParseTests {
     negexp("- 2") should parseTo[NegExp](NegExp(IntExp(2)))
   }
 
+  test("parsing an ifexp produces the correct tree") {
+    ifexp("if (a) {a}") should parseTo[IfExp](IfExp(IdnUse("a"), Block(IdnUse("a")), Block()))
+  }
+
 }
