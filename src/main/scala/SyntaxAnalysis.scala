@@ -40,6 +40,7 @@ class SyntaxAnalysis (positions : Positions)
   lazy val block : PackratParser[Block] =
     "{" ~> repsep(exp, ";") <~ "}" ^^ Block
 
+  //Needs more testing
   lazy val exp : PackratParser[Expression] =
     intexp |
     boolexp |
@@ -56,6 +57,10 @@ class SyntaxAnalysis (positions : Positions)
   lazy val letmut : PackratParser[LetMutDecl] =
     "let mut" ~> idndef ~ ("=" ~> exp) ^^ { case i ~ e => LetMutDecl(i, e) }
 
+  lazy val assign : PackratParser[AssignExp] =
+    idnuse ~ (":=" ~> exp) ^^ { case i ~ e => AssignExp(i, e) }
+
+  //Needs testing
   lazy val ifexp : PackratParser[IfExp] =
     "if" ~> exp ~ (block <~ "else") ~ block ^^ { case c ~ d ~ e => IfExp(c, d, e) }
 

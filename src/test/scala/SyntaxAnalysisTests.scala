@@ -148,8 +148,12 @@ class SyntaxAnalysisTests extends ParseTests {
     negexp("- 2") should parseTo[NegExp](NegExp(IntExp(2)))
   }
 
-  test("parsing an ifexp produces the correct tree") {
-    ifexp("if (a) {a}") should parseTo[IfExp](IfExp(IdnUse("a"), Block(IdnUse("a")), Block()))
+  test("parsing a assignment statement containing an integer produces the correct tree") {
+    assign("var := 1") should parseTo[AssignExp](AssignExp(IdnUse("var"), IntExp(1)))
+  }
+
+  test("parsing a assignment statement containing an idnuse produces the correct tree") {
+    assign("var := another_var") should parseTo[AssignExp](AssignExp(IdnUse("var"), IdnExp(IdnUse("another_var"))))
   }
 
 }
