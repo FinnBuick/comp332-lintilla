@@ -58,7 +58,7 @@ class SyntaxAnalysis (positions : Positions)
     "let mut" ~> idndef ~ ("=" ~> exp) ^^ { case i ~ e => LetMutDecl(i, e) }
 
   lazy val assign : PackratParser[AssignExp] =
-    idnuse ~ (":=" ~> exp) ^^ { case i ~ e => AssignExp(i, e) }
+    idnuse ~ (":=" ~> exp) ^^ { case i ~ e => AssignExp(i, e) 
 
   //Needs testing
   lazy val ifexp : PackratParser[IfExp] =
