@@ -33,7 +33,7 @@ class SyntaxAnalysis (positions : Positions)
 
   // Parses a whole Lintilla program.
   lazy val program : PackratParser[Program] =
-    "" ^^ (_ => Program(Vector()))    // FIXME replace this implementation.
+    repsep(exp, ";") ^^ ( p => Program(p) )
 
   // FIXME Add your parsers here!
 
@@ -51,6 +51,11 @@ class SyntaxAnalysis (positions : Positions)
     negexp |
     idnuse ^^ IdnExp
 
+  lazy val tipe : PackratParser[Type] =
+    "int" ^^ IntType |
+    "bool" ^^ BoolType |
+    "unit" ^^ UnitType 
+
   lazy val let : PackratParser[LetDecl] =
     "let" ~> idndef ~ ("=" ~> exp) ^^ { case i ~ e => LetDecl(i, e) }
 
@@ -58,7 +63,14 @@ class SyntaxAnalysis (positions : Positions)
     "let mut" ~> idndef ~ ("=" ~> exp) ^^ { case i ~ e => LetMutDecl(i, e) }
 
   lazy val assign : PackratParser[AssignExp] =
-    idnuse ~ (":=" ~> exp) ^^ { case i ~ e => AssignExp(i, e) 
+    idnuse ~ (":=" ~> exp) ^^ { case i ~ e => AssignExp(i, e) }
+
+
+  // lazy val paramdecl : PackratParser[ParamDecl] =
+  //   idndef ~ (":" ~> tipe) ^^ { case i ~ t => ParamDecl(i, t) }
+
+  // lazy val fndecl : PackratParser[FnDecl] =
+  //   idndef ~ (repsep())
 
   //Needs testing
   lazy val ifexp : PackratParser[IfExp] =

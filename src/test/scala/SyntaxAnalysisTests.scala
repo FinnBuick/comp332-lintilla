@@ -156,4 +156,8 @@ class SyntaxAnalysisTests extends ParseTests {
     assign("var := another_var") should parseTo[AssignExp](AssignExp(IdnUse("var"), IdnExp(IdnUse("another_var"))))
   }
 
+  test("parsing a program containting and intexp and a idnuse produces the correct tree") {
+    program("2; var;") should parseTo[Program](Program(Vector(IntExp(2), IdnExp(IdnUse("var")))))
+  }
+
 }
