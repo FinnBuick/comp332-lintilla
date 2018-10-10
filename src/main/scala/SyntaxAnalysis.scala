@@ -51,11 +51,6 @@ class SyntaxAnalysis (positions : Positions)
     negexp |
     idnuse ^^ IdnExp
 
-  lazy val tipe : PackratParser[Type] =
-    "int" ^^ IntType |
-    "bool" ^^ BoolType |
-    "unit" ^^ UnitType 
-
   lazy val let : PackratParser[LetDecl] =
     "let" ~> idndef ~ ("=" ~> exp) ^^ { case i ~ e => LetDecl(i, e) }
 
@@ -66,11 +61,11 @@ class SyntaxAnalysis (positions : Positions)
     idnuse ~ (":=" ~> exp) ^^ { case i ~ e => AssignExp(i, e) }
 
 
-  // lazy val paramdecl : PackratParser[ParamDecl] =
-  //   idndef ~ (":" ~> tipe) ^^ { case i ~ t => ParamDecl(i, t) }
+  lazy val paramdecl : PackratParser[ParamDecl] =
+    idndef ~ (":" ~> tipe) ^^ { case i ~ t => ParamDecl(i, t) }
 
-  // lazy val fndecl : PackratParser[FnDecl] =
-  //   idndef ~ (repsep())
+  lazy val fndecl : PackratParser[FnDecl] =
+    ("fn" ~> idndef ) ~ ("(" ~> repsep(paramdecl , ",") <~ ")") ~ opt("->" ~> tipe) ~ block ^^ FnDecl
 
   //Needs testing
   lazy val ifexp : PackratParser[IfExp] =
@@ -108,6 +103,14 @@ class SyntaxAnalysis (positions : Positions)
   // Parses an applied occurence of an identifier.
   lazy val idnuse : PackratParser[IdnUse] =
     identifier ^^ IdnUse
+
+  lazy val tipe : PackratParser[Type] =
+    "int" ^^^ IntType() |
+    "bool" ^^^ BoolType() |
+    "unit" ^^^ UnitType() |
+    ("fn" ~ "(" ~> repsep(tipe, ",") <~ ")" ) ~ ("->" ~> tipe) ^^ FnType |
+    "(" ~> tipe <~ ")"
+
 
   // Parses a legal identifier. Checks to ensure that the word parsed is
   // not a Lintilla keyword.

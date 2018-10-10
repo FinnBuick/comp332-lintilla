@@ -160,4 +160,12 @@ class SyntaxAnalysisTests extends ParseTests {
     program("2; var;") should parseTo[Program](Program(Vector(IntExp(2), IdnExp(IdnUse("var")))))
   }
 
+  test("parsing a parameter declaration containting an int produces the correct tree") {
+    paramdecl("var : int") should parseTo[ParamDecl](ParamDecl(IdnDef("var"), IntType()))
+  }
+
+  test("parsing an FnDecl produces the correct tree") {
+    fndecl("fn test(n : int) -> unit {x := 1}") should parseTo[FnDecl](FnDecl(IdnDef("test"), Vector(ParamDecl(IdnDef("n"), IntType())), Option(UnitType()), Block(Vector(AssignExp(IdnUse("x"), IntExp(1))))))
+  }
+
 }
